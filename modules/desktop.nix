@@ -42,6 +42,10 @@
     xwayland-satellite
     keepassxc
 
+    # CLI utilities
+    wl-clipboard
+    handlr-regex
+
     # Web Browsers
     librewolf
     mullvad-browser
