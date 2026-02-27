@@ -9,6 +9,7 @@
 {
   imports = [
     ./modules/desktop.nix
+    ./modules/nfs-shares.nix
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
@@ -43,30 +44,6 @@
       options = [
         "fmask=0022"
         "dmask=0022"
-      ];
-    };
-    "/mnt/leviathan/games" = {
-      device = "leviathan.jliu.lan:/volume1/Games";
-      fsType = "nfs";
-      options = [
-        "x-systemd.automount"
-        "noauto"
-      ];
-    };
-    "/mnt/leviathan/files" = {
-      device = "leviathan.jliu.lan:/volume1/Files";
-      fsType = "nfs";
-      options = [
-        "x-systemd.automount"
-        "noauto"
-      ];
-    };
-    "/mnt/leviathan/media" = {
-      device = "leviathan.jliu.lan:/volume1/Media";
-      fsType = "nfs";
-      options = [
-        "x-systemd.automount"
-        "noauto"
       ];
     };
   };
