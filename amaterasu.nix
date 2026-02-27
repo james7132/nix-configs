@@ -8,7 +8,7 @@
 # Hardware specific configuration for amaterasu
 {
   imports = [
-    ./desktop.nix
+    ./modules/desktop.nix
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
