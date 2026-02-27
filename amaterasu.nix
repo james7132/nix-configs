@@ -25,8 +25,17 @@
       };
     };
     initrd = {
+      availableKernelModules = [
+        "nvme"
+        "xhci_pci"
+        "ahci"
+        "usbhid"
+      ];
+      kernelModules = [ "dm-snapshot" ];
       luks.devices.cryptroot.device = "/dev/disk/by-label/NIX";
     };
+    kernelModules = [ ];
+    extraModulePackages = [ ];
   };
 
   fileSystems = {
