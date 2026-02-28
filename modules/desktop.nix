@@ -34,7 +34,6 @@
     foot
     fuzzel
     swaylock
-    htop
     mako
     swayidle
     swaybg

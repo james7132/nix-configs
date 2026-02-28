@@ -41,6 +41,7 @@
     fd
     pstree
     ripgrep
+    htop
 
     # Network Utilities
     dig
