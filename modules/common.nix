@@ -1,7 +1,7 @@
 {
   inputs,
-  pkgs,
   lib,
+  pkgs,
   ...
 }:
 {
@@ -9,11 +9,10 @@
 
   networking.networkmanager.enable = true;
 
-  # Set your time zone.
   time.timeZone = "America/Los_Angeles";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
+
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   users.users.james = {
     isNormalUser = true;
@@ -42,6 +41,9 @@
     fd
     pstree
     ripgrep
+
+    # Network Utilities
+    dig
   ];
 
   # Enable fish
