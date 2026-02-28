@@ -2,12 +2,14 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
   outputs =
     {
       self,
       nixpkgs,
       nixpkgs-unstable,
+      nixos-hardware,
       ...
     }@inputs:
     {
@@ -15,6 +17,14 @@
       nixosConfigurations.amaterasu = nixpkgs-unstable.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [ ./amaterasu.nix ];
+      };
+      # Main Personal Laptop
+      nixosConfigurations.tsukuyomi = nixpkgs-unstable.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [ 
+	  ./tsukuyomi.nix 
+          nixos-hardware.nixosModules.microsoft-surface-laptop-amd
+	];
       };
       # Home Lab servers
       nixosConfigurations.loki = nixpkgs.lib.nixosSystem {

@@ -1,10 +1,11 @@
 {
   inputs,
   pkgs,
+  lib,
   ...
 }:
 {
-  boot.kernelPackages = pkgs.linuxPackages;
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages;
 
   networking.networkmanager.enable = true;
 
