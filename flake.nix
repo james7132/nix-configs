@@ -21,10 +21,10 @@
       # Main Personal Laptop
       nixosConfigurations.tsukuyomi = nixpkgs-unstable.lib.nixosSystem {
         specialArgs = { inherit inputs; };
-        modules = [ 
-	  ./tsukuyomi.nix 
+        modules = [
+          ./tsukuyomi.nix
           nixos-hardware.nixosModules.microsoft-surface-laptop-amd
-	];
+        ];
       };
       # Home Lab servers
       nixosConfigurations.loki = nixpkgs-unstable.lib.nixosSystem {

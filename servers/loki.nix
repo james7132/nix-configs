@@ -1,4 +1,9 @@
-{ config, lib, modulesPath, ... }:
+{
+  config,
+  lib,
+  modulesPath,
+  ...
+}:
 # Hardware specific configuration for loki
 {
   imports = [
@@ -20,7 +25,10 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 80 9443 ];
+  networking.firewall.allowedTCPPorts = [
+    80
+    9443
+  ];
 
   services.technitium-dns-server = {
     enable = true;
@@ -30,7 +38,12 @@
   boot = {
     initrd = {
       kernelModules = [ "kvm-intel" ];
-      availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "sd_mod" ];
+      availableKernelModules = [
+        "xhci_pci"
+        "ahci"
+        "usb_storage"
+        "sd_mod"
+      ];
     };
     loader = {
       efi.canTouchEfiVariables = true;
@@ -57,9 +70,9 @@
     };
   };
 
-  swapDevices =
-    [ { device = "/dev/disk/by-uuid/e9889b6a-4c29-46a7-b785-d509992fbb94"; }
-    ];
+  swapDevices = [
+    { device = "/dev/disk/by-uuid/e9889b6a-4c29-46a7-b785-d509992fbb94"; }
+  ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
