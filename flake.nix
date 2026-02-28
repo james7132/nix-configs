@@ -27,7 +27,7 @@
 	];
       };
       # Home Lab servers
-      nixosConfigurations.loki = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.loki = nixpkgs-unstable.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [ ./servers/loki.nix ];
       };
