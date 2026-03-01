@@ -7,10 +7,15 @@
 # Hardware specific configuration for loki
 {
   imports = [
-    ../modules/server.nix
-    ../modules/nfs-shares.nix
+    ../modules/default.nix
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
+
+  host = {
+    desktop.enable = false;
+    server.enable = true;
+    nfs.enable = true;
+  };
 
   networking.hostName = "loki";
 
@@ -74,7 +79,6 @@
     { device = "/dev/disk/by-uuid/e9889b6a-4c29-46a7-b785-d509992fbb94"; }
   ];
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   system.stateVersion = "25.11";

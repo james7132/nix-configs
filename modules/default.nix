@@ -5,14 +5,19 @@
   ...
 }:
 {
+  imports = [
+    ./desktop/default.nix
+    ./server.nix
+    ./nfs-shares.nix
+  ];
+
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages;
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   networking.networkmanager.enable = true;
 
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
-
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   users.users.james = {
     isNormalUser = true;
@@ -27,24 +32,10 @@
   };
 
   environment.systemPackages = with pkgs; [
-    # Editors
     vim
-
     curl
     git
-
-    # Language Servers
-    nil # Nix
-
-    # Formatters
-    nixfmt # Nix
-
-    # Terminal utilities
-    dust
-    htop
     pstree
-
-    # Network Utilities
     dig
   ];
 

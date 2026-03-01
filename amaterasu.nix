@@ -8,10 +8,19 @@
 # Hardware specific configuration for amaterasu
 {
   imports = [
-    ./modules/desktop.nix
-    ./modules/nfs-shares.nix
+    ./modules/default.nix
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
+
+  host = {
+    desktop = {
+      enable = true;
+      gaming = true;
+      development = true;
+    };
+    server.enable = false;
+    nfs.enable = true;
+  };
 
   networking.hostName = "amaterasu";
 

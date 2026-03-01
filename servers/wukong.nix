@@ -1,10 +1,16 @@
-{ lib, modulesPath, ... }:
+{ modulesPath, ... }:
 # Hardware specific configuration for wukong
 {
   imports = [
-    ../modules/server.nix
+    ../modules/default.nix
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
+
+  host = {
+    desktop.enable = false;
+    server.enable = true;
+    nfs.enable = true;
+  };
 
   networking.hostName = "wukong";
 
@@ -32,6 +38,5 @@
     };
   };
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   system.stateVersion = "25.11";
 }
