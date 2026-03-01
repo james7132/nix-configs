@@ -51,7 +51,7 @@
   programs.eza = {
     enable = true;
     colors = "always";
-    enableFishIntegrations = false;
+    enableFishIntegration = false;
     extraOptions = [
       "-lah"
       "--group-directories-first"
@@ -289,6 +289,229 @@
     settings = {
       color = "#000000";
     };
+  };
+
+  programs.waybar = {
+    enable = true;
+    settings = {
+      mainBar = {
+
+        layer = "top"; # Waybar at top layer
+        position = "top"; # Waybar position (top|bottom|left|right)
+        height = 35; # Waybar height (to be removed for auto height)
+        spacing = 20; # Gaps between modules (4px)
+        reload_style_on_change = true;
+        modules-left = [
+          "niri/workspaces"
+          "niri/window"
+        ];
+        modules-center = [
+          "clock"
+        ];
+        modules-right = [
+          "tray"
+          "mpd"
+          "wireplumber"
+          "network"
+        ];
+        # Modules configuration
+        "niri/window" = {
+          format = "{}";
+          icon = true;
+          rewrite = {
+            ".*Discord.*(#.*)" = "$1";
+            "(.*) — Mullvad Browser" = "$1";
+            "(.*) — Librewolf" = "$1";
+          };
+        };
+        mpd = {
+          format = "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime =%M =%S}/{totalTime =%M =%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ";
+          format-disconnected = "Disconnected ";
+          format-stopped = "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ";
+          unknown-tag = "N/A";
+          interval = 5;
+          consume-icons = {
+            on = " ";
+          };
+          random-icons = {
+            off = "<span color=\"#f53c3c\"></span> ";
+            on = " ";
+          };
+          repeat-icons = {
+            on = " ";
+          };
+          single-icons = {
+            on = "1 ";
+          };
+          state-icons = {
+            paused = "";
+            playing = "";
+          };
+          tooltip-format = "MPD (connected)";
+          tooltip-format-disconnected = "MPD (disconnected)";
+        };
+        tray = {
+          spacing = 10;
+        };
+        clock = {
+          # timezone = "America/New_York";
+          tooltip-format = "<big>{ =%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+          format-alt = "<bold>{ =%Y-%m-%d}</bold>";
+        };
+        network = {
+          format-wifi = " ";
+          format-ethernet = " ";
+          tooltip-format = "{ifname} ={ipaddr}/{cidr} ({signalStrength})";
+          format-linked = " ";
+          format-disconnected = "⚠";
+        };
+        wireplumber = {
+          # scroll-step = 1; # %; can be a float
+          format = "{volume}% {icon} {format_source}";
+          format-muted = " {format_source}";
+          format-source = "{volume}% ";
+          format-source-muted = "";
+          format-icons = {
+            headphone = "";
+            hands-free = "";
+            headset = "";
+            phone = "";
+            portable = "";
+            car = "";
+            default = [
+              ""
+              ""
+              ""
+            ];
+          };
+        };
+      };
+    };
+    style = ''
+      * {
+          font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+          font-size: 18px;
+          font-weight: bold;
+      }
+
+      window#waybar {
+          background-color: rgba(43, 48, 59, 0.5);
+      }
+
+      window#waybar.hidden {
+          opacity: 0.2;
+      }
+
+      /*
+      window#waybar.empty {
+          background-color: transparent;
+      }
+      window#waybar.solo {
+          background-color: #FFFFFF;
+      }
+      */
+
+      window#waybar.termite {
+          background-color: #3F3F3F;
+      }
+
+      window#waybar.chromium {
+          background-color: #000000;
+          border: none;
+      }
+
+      button {
+          /* Use box-shadow instead of border so the text isn't offset */
+          box-shadow: inset 0 -3px transparent;
+          /* Avoid rounded borders under each button name */
+          border: none;
+          border-radius: 0;
+      }
+
+      /* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+      button:hover {
+          background: inherit;
+          box-shadow: inset 0 -3px #ffffff;
+      }
+
+      /* you can set a style on hover for any module like this */
+      #wireplumber:hover {
+          background-color: #a37800;
+      }
+
+      #workspaces button {
+          padding: 0 5px;
+          background-color: transparent;
+          color: #ffffff;
+      }
+
+      #workspaces button:hover {
+          background: rgba(0, 0, 0, 0.2);
+      }
+
+      #workspaces button.focused, #workspaces button.active {
+          background-color: #64727D;
+          box-shadow: inset 0 -3px #ffffff;
+      }
+
+      #workspaces button.urgent {
+          background-color: #eb4d4b;
+      }
+
+      #mode {
+          background-color: #64727D;
+          box-shadow: inset 0 -3px #ffffff;
+      }
+
+      #window,
+      #workspaces {
+          margin: 0 4px;
+      }
+
+      /* If workspaces is the leftmost module, omit left margin */
+      .modules-left > widget:first-child > #workspaces {
+          margin-left: 0;
+      }
+
+      /* If workspaces is the rightmost module, omit right margin */
+      .modules-right > widget:last-child > #workspaces {
+          margin-right: 0;
+      }
+
+      #network.disconnected {
+          background-color: #f53c3c;
+      }
+
+      #wireplumber.muted {
+          background-color: #f53c3c;
+      }
+
+      #tray > .passive {
+          -gtk-icon-effect: dim;
+      }
+
+      #tray > .needs-attention {
+          -gtk-icon-effect: highlight;
+          background-color: #eb4d4b;
+      }
+
+      #mpd {
+          background-color: #66cc99;
+          color: #2a5c45;
+      }
+
+      #mpd.disconnected {
+          background-color: #f53c3c;
+      }
+
+      #mpd.stopped {
+          background-color: #90b1b1;
+      }
+
+      #mpd.paused {
+          background-color: #51a37a;
+      }
+    '';
   };
 
   programs.vesktop = {
@@ -881,7 +1104,6 @@
         settingsSync = false;
       };
     };
-
   };
 
   programs.librewolf = {
