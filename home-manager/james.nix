@@ -16,6 +16,8 @@
     nixfmt # Nix
   ];
 
+  xdg.configFile."niri/config.kdl".source = ./niri.kdl;
+
   programs.bash = {
     enable = true;
     initExtra = ''
@@ -295,7 +297,6 @@
     enable = true;
     settings = {
       mainBar = {
-
         layer = "top"; # Waybar at top layer
         position = "top"; # Waybar position (top|bottom|left|right)
         height = 35; # Waybar height (to be removed for auto height)
