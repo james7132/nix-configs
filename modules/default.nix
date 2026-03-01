@@ -1,9 +1,13 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
   ...
 }:
+let
+  host = config.host;
+in
 {
   imports = [
     ./desktop/default.nix
@@ -28,6 +32,7 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "bak";
+    extraSpecialArgs = { inherit host; };
     users.james = ../home-manager/james.nix;
   };
 
