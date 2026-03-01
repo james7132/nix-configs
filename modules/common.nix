@@ -29,7 +29,6 @@
   environment.systemPackages = with pkgs; [
     # Editors
     vim
-    helix
 
     curl
     git
@@ -41,14 +40,9 @@
     nixfmt # Nix
 
     # Terminal utilities
-    eza
-    zoxide
-    tmux
-    fzf
-    fd
-    pstree
-    ripgrep
+    dust
     htop
+    pstree
 
     # Network Utilities
     dig
@@ -56,16 +50,6 @@
 
   # Enable fish
   programs.fish.enable = true;
-
-  programs.bash = {
-    interactiveShellInit = ''
-      if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
-      then
-        shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-        exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-      fi
-    '';
-  };
 
   # Use sudo-rs instead of sudo
   security.sudo-rs.enable = true;
