@@ -32,7 +32,12 @@
         "usbhid"
       ];
       kernelModules = [ "dm-snapshot" ];
-      luks.devices.cryptroot.device = "/dev/disk/by-label/NIX";
+      luks.devices.cryptroot = {
+        device = "/dev/disk/by-label/NIX";
+        preLVM = true;
+        # SSD Optimizations
+        bypassWorkqueues = true;
+      };
     };
     kernelModules = [ ];
     extraModulePackages = [ ];
@@ -60,7 +65,11 @@
   swapDevices = [
     {
       device = "/dev/NixVolGroup/swap";
-      # For zram
+      encrypted = {
+        enable = true;
+        blkDev = "/dev/disk/by-label/NIX";
+        label = "cryptroot";
+      };
       priority = 2;
     }
   ];

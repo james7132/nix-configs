@@ -19,6 +19,12 @@
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
 
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.james = ../home-manager/james.nix;
+  };
+
   environment.systemPackages = with pkgs; [
     # Editors
     vim
