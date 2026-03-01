@@ -30,6 +30,9 @@
   programs.fish = {
     enable = true;
     preferAbbrs = true;
+    loginShellInit = ''
+      set -gx PATH "$HOME/.local/bin:$PATH"
+    '';
     interactiveShellInit = ''
       set fish_greeting # Disable greeting
       fish_config theme choose Dracula | source
@@ -40,6 +43,7 @@
     };
     shellAliases = {
       ls = "eza";
+      tree = "eza --tree";
       cd = "z";
     };
   };
@@ -47,6 +51,7 @@
   programs.eza = {
     enable = true;
     colors = "always";
+    enableFishIntegrations = false;
     extraOptions = [
       "-lah"
       "--group-directories-first"
