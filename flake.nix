@@ -23,53 +23,55 @@
       ...
     }@inputs:
     {
-      # Main Personal Desktop
-      nixosConfigurations.amaterasu = nixpkgs-unstable.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./amaterasu.nix
-          home-manager-unstable.nixosModules.home-manager
-        ];
-      };
-      # Main Personal Laptop
-      nixosConfigurations.tsukuyomi = nixpkgs-unstable.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./tsukuyomi.nix
-          nixos-hardware.nixosModules.microsoft-surface-laptop-amd
-          home-manager-unstable.nixosModules.home-manager
-        ];
-      };
-      # Home Lab servers
-      nixosConfigurations.loki = nixpkgs-unstable.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./servers/loki.nix
-          home-manager-unstable.nixosModules.home-manager
-        ];
-      };
-      # Remote VPS servers
-      nixosConfigurations.hourai = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./servers/hourai.nix
-          home-manager.nixosModules.home-manager
-        ];
-      };
-      nixosConfigurations.zeus = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./servers/zeus.nix
-          home-manager.nixosModules.home-manager
-        ];
-      };
-      # Remotely Managed Servers
-      nixosConfigurations.wukong = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          ./servers/wukong.nix
-          home-manager.nixosModules.home-manager
-        ];
+      nixosConfigurations = {
+        # Main Personal Desktop
+        amaterasu = nixpkgs-unstable.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./amaterasu.nix
+            home-manager-unstable.nixosModules.home-manager
+          ];
+        };
+        # Main Personal Laptop
+        tsukuyomi = nixpkgs-unstable.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./tsukuyomi.nix
+            nixos-hardware.nixosModules.microsoft-surface-laptop-amd
+            home-manager-unstable.nixosModules.home-manager
+          ];
+        };
+        # Home Lab servers
+        loki = nixpkgs-unstable.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./servers/loki.nix
+            home-manager-unstable.nixosModules.home-manager
+          ];
+        };
+        # Remote VPS servers
+        hourai = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./servers/hourai.nix
+            home-manager.nixosModules.home-manager
+          ];
+        };
+        zeus = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./servers/zeus.nix
+            home-manager.nixosModules.home-manager
+          ];
+        };
+        # Remotely Managed Servers
+        wukong = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./servers/wukong.nix
+            home-manager.nixosModules.home-manager
+          ];
+        };
       };
     };
 }
