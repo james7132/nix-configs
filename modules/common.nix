@@ -22,6 +22,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    backupFileExtension = "bak";
     users.james = ../home-manager/james.nix;
   };
 
