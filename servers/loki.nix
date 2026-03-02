@@ -4,6 +4,16 @@
   modulesPath,
   ...
 }:
+let
+  mkProxyHost = url: {
+    useACMEHost = "no-bull.sh";
+    forceSSL = true;
+    locations."/" = {
+      proxyPass = url;
+      proxyWebsockets = true;
+    };
+  };
+in
 # Hardware specific configuration for loki
 {
   imports = [
@@ -27,13 +37,47 @@
     recommendedProxySettings = true;
     recommendedTlsSettings = true;
 
-    virtualHosts."ns1.no-bull.sh" = {
-      useACMEHost = "no-bull.sh";
-      forceSSL = true;
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:5380";
-        proxyWebsockets = true;
+    virtualHosts = {
+      "files.no-bull.sh" = {
+        useACMEHost = "no-bull.sh";
+        forceSSL = true;
+        root = "/mnt/leviathan/files/public";
+        extraConfig = ''
+          autoindex on;
+          autoindex_exact_size off;
+          autoindex_localtime on;
+          index off;
+        '';
       };
+
+      "i.no-bull.sh" = {
+        useACMEHost = "no-bull.sh";
+        forceSSL = true;
+        root = "/mnt/leviathan/files/screenshots";
+      };
+
+      "ns1.no-bull.sh" = mkProxyHost "http://127.0.0.1:5380";
+      "ns2.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:5830";
+
+      "immich.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:2283";
+      "notify.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9072";
+
+      "jellyfin.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8096";
+      "radarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:7878";
+      "sonarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8989";
+      "lidarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8686";
+      "bazarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:6767";
+      "prowlarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9696";
+      "komga.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9123";
+
+      "trasnmission.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9091";
+      "freshrss.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9576";
+      "hassio.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8123";
+
+      "stats.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:7590";
+      "sync.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8384";
+
+      "vikunja.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:3456";
     };
   };
 

@@ -14,7 +14,7 @@ in
   config = mkIf cfg.enable {
     fileSystems = {
       "/mnt/leviathan/games" = {
-        device = "leviathan.jliu.lan:/volume1/Games";
+        device = "leviathan.no-bull.sh:/volume1/Games";
         fsType = "nfs";
         options = [
           "x-systemd.automount"
@@ -22,7 +22,7 @@ in
         ];
       };
       "/mnt/leviathan/files" = {
-        device = "leviathan.jliu.lan:/volume1/Files";
+        device = "leviathan.no-bull.sh:/volume1/Files";
         fsType = "nfs";
         options = [
           "x-systemd.automount"
@@ -30,7 +30,7 @@ in
         ];
       };
       "/mnt/leviathan/media" = {
-        device = "leviathan.jliu.lan:/volume1/Media";
+        device = "leviathan.no-bull.sh:/volume1/Media";
         fsType = "nfs";
         options = [
           "x-systemd.automount"

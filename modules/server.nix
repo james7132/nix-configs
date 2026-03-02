@@ -28,5 +28,7 @@ in
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHvsHqk6FhbxJ7likL7zy+iUoR0tBlDocOyI++XsseI8 contact@no-bull.sh"
       ];
     };
+
+    nix.settings.trusted-users = [ "james" ];
   };
 }
