@@ -13,6 +13,7 @@ in
     ./desktop/default.nix
     ./server.nix
     ./nfs-shares.nix
+    inputs.agenix.nixosModules.default
   ];
 
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages;
@@ -42,6 +43,7 @@ in
     git
     pstree
     dig
+    inputs.agenix.packages.x86_64-linux.default
   ];
 
   # Enable fish

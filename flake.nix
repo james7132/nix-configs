@@ -1,5 +1,6 @@
 {
   inputs = {
+    agenix.url = "github:ryantm/agenix";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -15,6 +16,7 @@
   outputs =
     {
       self,
+      agenix,
       nixpkgs,
       nixpkgs-unstable,
       nixos-hardware,
@@ -30,6 +32,8 @@
           modules = [
             ./amaterasu.nix
             home-manager-unstable.nixosModules.home-manager
+
+            agenix.nixosModules.default
           ];
         };
         # Main Personal Laptop

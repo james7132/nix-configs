@@ -21,8 +21,15 @@
 
   services.nginx = {
     enable = true;
+
+    recommendedGzipSettings = true;
+    recommendedOptimisation = true;
     recommendedProxySettings = true;
-    virtualHosts."ns1.dns.internal" = {
+    recommendedTlsSettings = true;
+
+    virtualHosts."ns1.no-bull.sh" = {
+      useACMEHost = "no-bull.sh";
+      forceSSL = true;
       locations."/" = {
         proxyPass = "http://127.0.0.1:5380";
         proxyWebsockets = true;
@@ -32,6 +39,7 @@
 
   networking.firewall.allowedTCPPorts = [
     80
+    443
     9443
   ];
 
@@ -39,6 +47,25 @@
     enable = true;
     openFirewall = true;
   };
+
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = "contact@no-bull.sh";
+    certs."no-bull.sh" = {
+      domain = "*.no-bull.sh";
+      group = "nginx";
+      dnsResolver = "9.9.9.9#53";
+      dnsProvider = "cloudflare";
+      environmentFile = config.age.secrets."cloudflare-dns-token.age".path;
+    };
+  };
+
+  age.secrets."cloudflare-dns-token.age" = {
+    owner = "acme";
+    file = ../secrets/cloudflare-dns-token.age;
+  };
+
+  users.users.nginx.extraGroups = [ "acme" ];
 
   boot = {
     initrd = {
