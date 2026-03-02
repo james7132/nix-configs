@@ -9,6 +9,10 @@ let
   cfg = config.host.desktop;
 in
 {
+  imports = [
+    ./development.nix
+  ];
+
   options.host.desktop = {
     enable = mkOption {
       type = types.bool;

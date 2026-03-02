@@ -1,4 +1,9 @@
-{ host, lib, ... }:
+{
+  host,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = host.desktop;
@@ -6,6 +11,10 @@ in
 {
   config = mkIf cfg.enable {
     xdg.configFile."niri/config.kdl".source = ./niri.kdl;
+
+    home.packages = with pkgs; [
+      python3
+    ];
 
     programs.fuzzel = {
       # enable = config.hardware.graphics.enable;

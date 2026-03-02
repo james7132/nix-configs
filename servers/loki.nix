@@ -38,6 +38,13 @@ in
     recommendedTlsSettings = true;
 
     virtualHosts = {
+      "no-bull.sh" = {
+        useACMEHost = "no-bull.sh";
+        forceSSL = true;
+        default = true;
+        root = "/var/www/no-bull.sh";
+      };
+
       "files.no-bull.sh" = {
         useACMEHost = "no-bull.sh";
         forceSSL = true;
@@ -110,6 +117,20 @@ in
   };
 
   users.users.nginx.extraGroups = [ "acme" ];
+
+  services.cloudflare-ddns = {
+    enable = true;
+    ttl = 300;
+    proxied = "true";
+    domains = [ "no-bull.sh" ];
+    user = "cloudflare-ddns";
+    credentialsFile = config.age.secrets."cloudflare-ddns.age".path;
+  };
+
+  age.secrets."cloudflare-ddns.age" = {
+    owner = "cloudflare-ddns";
+    file = ../secrets/cloudflare-ddns.age;
+  };
 
   boot = {
     initrd = {

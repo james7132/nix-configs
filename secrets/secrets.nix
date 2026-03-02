@@ -21,4 +21,8 @@ in
     publicKeys = [ james ] ++ systems;
     armor = true;
   };
+  "cloudflare-ddns.age" = {
+    publicKeys = [ james ] ++ systems;
+    armor = true;
+  };
 }
