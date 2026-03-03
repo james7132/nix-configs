@@ -55,6 +55,11 @@ in
           autoindex_localtime on;
           index off;
         '';
+        locations."~* .*\@eaDir.*" = {
+          extraConfig = ''
+            deny all;
+          '';
+        };
       };
 
       "i.no-bull.sh" = {

@@ -13,6 +13,8 @@
 
     # Formatters
     nixfmt # Nix
+
+    traceroute
   ];
 
   programs.bash = {
