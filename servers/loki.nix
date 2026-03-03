@@ -71,6 +71,9 @@ in
       "ns1.no-bull.sh" = mkProxyHost "http://127.0.0.1:5380";
       "ns2.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:5830";
 
+      "pds.no-bull.sh" =
+        mkProxyHost "http://127.0.0.1:${builtins.toString config.services.bluesky-pds.settings.PDS_PORT}";
+
       "immich.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:2283";
       "notify.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9072";
 
@@ -96,7 +99,6 @@ in
   networking.firewall.allowedTCPPorts = [
     80
     443
-    9443
   ];
 
   services.technitium-dns-server = {
@@ -108,7 +110,8 @@ in
     acceptTerms = true;
     defaults.email = "contact@no-bull.sh";
     certs."no-bull.sh" = {
-      domain = "*.no-bull.sh";
+      domain = "no-bull.sh";
+      extraDomainNames = [ "*.no-bull.sh" ];
       group = "nginx";
       dnsResolver = "9.9.9.9#53";
       dnsProvider = "cloudflare";
@@ -135,6 +138,15 @@ in
   age.secrets."cloudflare-ddns.age" = {
     owner = "cloudflare-ddns";
     file = ../secrets/cloudflare-ddns.age;
+  };
+
+  services.bluesky-pds = {
+    enable = true;
+    pdsadmin.enable = true;
+    settings = {
+      PDS_PORT = 7070;
+      PDS_HOSTNAME = "pds.no-bull.sh";
+    };
   };
 
   boot = {
