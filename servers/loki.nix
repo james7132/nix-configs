@@ -119,9 +119,21 @@ in
     };
   };
 
-  age.secrets."cloudflare-dns-token.age" = {
-    owner = "acme";
-    file = ../secrets/cloudflare-dns-token.age;
+  age.secrets = {
+    "bluesky-pds.age" = {
+      owner = "pds";
+      file = ../secrets/bluesky-pds.age;
+    };
+
+    "cloudflare-dns-token.age" = {
+      owner = "acme";
+      file = ../secrets/cloudflare-dns-token.age;
+    };
+
+    "cloudflare-ddns.age" = {
+      owner = "cloudflare-ddns";
+      file = ../secrets/cloudflare-ddns.age;
+    };
   };
 
   users.users.nginx.extraGroups = [ "acme" ];
@@ -135,14 +147,10 @@ in
     credentialsFile = config.age.secrets."cloudflare-ddns.age".path;
   };
 
-  age.secrets."cloudflare-ddns.age" = {
-    owner = "cloudflare-ddns";
-    file = ../secrets/cloudflare-ddns.age;
-  };
-
   services.bluesky-pds = {
     enable = true;
     pdsadmin.enable = true;
+    environmentFiles = [ config.age.secrets."bluesky-pds.age".path ];
     settings = {
       PDS_PORT = 7070;
       PDS_HOSTNAME = "pds.no-bull.sh";

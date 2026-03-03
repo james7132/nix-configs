@@ -17,6 +17,13 @@ let
   ];
 in
 {
+  "bluesky-pds.age" = {
+    publicKeys = [
+      james
+      loki
+    ];
+    armor = true;
+  };
   "cloudflare-dns-token.age" = {
     publicKeys = [ james ] ++ systems;
     armor = true;
