@@ -32,4 +32,11 @@ in
     publicKeys = [ james ] ++ systems;
     armor = true;
   };
+  "sonarr.age" = {
+    publicKeys = [
+      james
+      loki
+    ];
+    armor = true;
+  };
 }

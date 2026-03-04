@@ -49,7 +49,7 @@
         loki = nixpkgs-unstable.lib.nixosSystem {
           specialArgs = { inherit inputs; };
           modules = [
-            ./servers/loki.nix
+            ./servers/loki/default.nix
             home-manager-unstable.nixosModules.home-manager
           ];
         };

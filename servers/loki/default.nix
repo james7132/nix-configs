@@ -4,6 +4,7 @@
   modulesPath,
   ...
 }:
+with lib;
 let
   mkProxyHost = url: {
     useACMEHost = "no-bull.sh";
@@ -17,7 +18,10 @@ in
 # Hardware specific configuration for loki
 {
   imports = [
-    ../modules/default.nix
+    ../../modules/default.nix
+    ./acme.nix
+    ./cloudflare-ddns.nix
+    ./bluesky-pds.nix
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
@@ -71,21 +75,24 @@ in
       "ns1.no-bull.sh" = mkProxyHost "http://127.0.0.1:5380";
       "ns2.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:5830";
 
-      "pds.no-bull.sh" =
-        mkProxyHost "http://127.0.0.1:${builtins.toString config.services.bluesky-pds.settings.PDS_PORT}";
+      "pds.no-bull.sh" = mkIf config.services.bluesky-pds.enable (
+        mkProxyHost "http://127.0.0.1:${builtins.toString config.services.bluesky-pds.settings.PDS_PORT}"
+      );
 
       "immich.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:2283";
       "notify.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9072";
 
       "jellyfin.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8096";
       "radarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:7878";
-      "sonarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8989";
+      "sonarr.no-bull.sh" = mkIf config.services.sonarr.enable (
+        mkProxyHost "http://127.0.0.1:${builtins.toString config.services.sonarr.settings.server.port}"
+      );
       "lidarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8686";
       "bazarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:6767";
       "prowlarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9696";
       "komga.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9123";
 
-      "trasnmission.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9091";
+      "transmission.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9091";
       "freshrss.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9576";
       "hassio.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8123";
 
@@ -106,55 +113,33 @@ in
     openFirewall = true;
   };
 
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "contact@no-bull.sh";
-    certs."no-bull.sh" = {
-      domain = "no-bull.sh";
-      extraDomainNames = [ "*.no-bull.sh" ];
-      group = "nginx";
-      dnsResolver = "9.9.9.9#53";
-      dnsProvider = "cloudflare";
-      environmentFile = config.age.secrets."cloudflare-dns-token.age".path;
-    };
-  };
-
-  age.secrets = {
-    "bluesky-pds.age" = {
-      owner = "pds";
-      file = ../secrets/bluesky-pds.age;
-    };
-
-    "cloudflare-dns-token.age" = {
-      owner = "acme";
-      file = ../secrets/cloudflare-dns-token.age;
-    };
-
-    "cloudflare-ddns.age" = {
-      owner = "cloudflare-ddns";
-      file = ../secrets/cloudflare-ddns.age;
-    };
-  };
-
-  users.users.nginx.extraGroups = [ "acme" ];
-
-  services.cloudflare-ddns = {
+  services.sonarr = {
     enable = true;
-    ttl = 300;
-    proxied = "true";
-    domains = [ "no-bull.sh" ];
-    user = "cloudflare-ddns";
-    credentialsFile = config.age.secrets."cloudflare-ddns.age".path;
-  };
-
-  services.bluesky-pds = {
-    enable = true;
-    pdsadmin.enable = true;
-    environmentFiles = [ config.age.secrets."bluesky-pds.age".path ];
+    openFirewall = false;
+    user = "sonarr";
     settings = {
-      PDS_PORT = 7070;
-      PDS_HOSTNAME = "pds.no-bull.sh";
+      app = {
+        theme = "dark";
+      };
+      server = {
+        port = 8989;
+        enableSsl = false;
+      };
+      log = {
+        analyticsEnabled = false;
+        logLevel = "info";
+      };
+      auth = {
+        authenticationMethod = "Forms";
+        authenticationRequried = true;
+      };
     };
+    environmentFiles = [ config.age.secrets."sonarr.age".path ];
+  };
+
+  age.secrets."sonarr.age" = {
+    owner = config.services.sonarr.user;
+    file = ../../secrets/sonarr.age;
   };
 
   boot = {
@@ -196,7 +181,7 @@ in
     { device = "/dev/disk/by-uuid/e9889b6a-4c29-46a7-b785-d509992fbb94"; }
   ];
 
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = mkDefault config.hardware.enableRedistributableFirmware;
 
   system.stateVersion = "25.11";
 }
