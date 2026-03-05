@@ -26,6 +26,7 @@ in
   ];
 
   host = {
+    secure-boot.enable = true;
     desktop.enable = false;
     server.enable = true;
     nfs.enable = true;
@@ -154,11 +155,6 @@ in
     };
     loader = {
       efi.canTouchEfiVariables = true;
-      grub = {
-        enable = true;
-        device = "nodev"; # "nodev" is used for UEFI
-        efiSupport = true;
-      };
     };
   };
 
