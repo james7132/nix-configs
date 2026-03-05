@@ -12,6 +12,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.0.0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs =
     {
@@ -32,7 +36,6 @@
           modules = [
             ./amaterasu.nix
             home-manager-unstable.nixosModules.home-manager
-
             agenix.nixosModules.default
           ];
         };
@@ -51,6 +54,7 @@
           modules = [
             ./servers/loki/default.nix
             home-manager-unstable.nixosModules.home-manager
+            agenix.nixosModules.default
           ];
         };
         # Remote VPS servers

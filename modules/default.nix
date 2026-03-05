@@ -13,6 +13,7 @@ in
     ./desktop/default.nix
     ./server.nix
     ./nfs-shares.nix
+    ./secure_boot.nix
     inputs.agenix.nixosModules.default
   ];
 
