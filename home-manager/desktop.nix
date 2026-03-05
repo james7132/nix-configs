@@ -14,6 +14,7 @@ in
 
     home.packages = with pkgs; [
       python3
+      yazi
     ];
 
     programs.fuzzel = {

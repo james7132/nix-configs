@@ -29,7 +29,7 @@ in
       ];
     };
 
-    nix.settings.trusted-users = [ "james" ];
+    nix.settings.allowed-users = [ "james" ];
 
     # Enable IPv6 and disable IPv6 Privacy Extensions to force MAC address
     # based IP address generation.

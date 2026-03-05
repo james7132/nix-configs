@@ -53,6 +53,8 @@ in
         "nvidia-x11"
         "nvidia-settings"
         "nvidia-persistenced"
+
+        "unrar"
       ];
 
     environment.systemPackages = with pkgs; [
@@ -85,6 +87,9 @@ in
       jellyfin-desktop
       mpv
       ncspot
+
+      unzip
+      unrar
     ];
 
     fonts.packages = with pkgs; [
@@ -109,6 +114,14 @@ in
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
       dedicatedServer.openFirewall = false; # Close ports in the firewall for Source Dedicated Server
       localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+    };
+
+    services.syncthing = {
+      enable = true;
+      user = "james";
+      openDefaultPorts = true;
+      configDir = "/home/james/.config/syncthing";
+      dataDir = "/home/james/syncthing";
     };
 
     # Enable Protonmail Brdige
