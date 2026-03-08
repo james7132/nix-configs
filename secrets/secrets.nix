@@ -39,6 +39,13 @@ in
     ];
     armor = true;
   };
+  "radarr.age" = {
+    publicKeys = [
+      james
+      loki
+    ];
+    armor = true;
+  };
   "prowlarr.age" = {
     publicKeys = [
       james

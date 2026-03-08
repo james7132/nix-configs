@@ -89,7 +89,7 @@ in
       "notify.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9072";
 
       "jellyfin.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8096";
-      "radarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:7878";
+      "radarr.no-bull.sh" = mkLocalProxyHost config.services.radarr;
       "sonarr.no-bull.sh" = mkLocalProxyHost config.services.sonarr;
       "lidarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8686";
       "bazarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:6767";
@@ -144,6 +144,35 @@ in
   age.secrets."sonarr.age" = {
     owner = config.services.sonarr.user;
     file = ../../secrets/sonarr.age;
+  };
+
+  services.radarr = {
+    enable = true;
+    openFirewall = false;
+    user = "radarr";
+    settings = {
+      app = {
+        theme = "dark";
+      };
+      server = {
+        port = 7878;
+        enableSsl = false;
+      };
+      log = {
+        analyticsEnabled = false;
+        logLevel = "info";
+      };
+      auth = {
+        authenticationMethod = "Forms";
+        authenticationRequried = true;
+      };
+    };
+    environmentFiles = [ config.age.secrets."radarr.age".path ];
+  };
+
+  age.secrets."radarr.age" = {
+    owner = config.services.radarr.user;
+    file = ../../secrets/radarr.age;
   };
 
   services.prowlarr = {
