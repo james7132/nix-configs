@@ -15,6 +15,8 @@
     nixfmt # Nix
 
     traceroute
+    skim
+    dust
   ];
 
   programs.bash = {
@@ -46,6 +48,7 @@
       ls = "eza";
       tree = "eza --tree";
       cd = "z";
+      fzf = "sk";
     };
   };
 
@@ -60,7 +63,6 @@
   };
 
   programs.fd.enable = true;
-  programs.fzf.enable = true;
   programs.ripgrep.enable = true;
   programs.zoxide.enable = true;
 
