@@ -39,4 +39,11 @@ in
     ];
     armor = true;
   };
+  "prowlarr.age" = {
+    publicKeys = [
+      james
+      loki
+    ];
+    armor = true;
+  };
 }
