@@ -14,11 +14,6 @@ let
       proxyWebsockets = true;
     };
   };
-  mkLocalProxyHost =
-    service:
-    mkIf service.enable (
-      mkProxyHost "http://127.0.0.1:${builtins.toString service.settings.server.port}"
-    );
 in
 # Hardware specific configuration for loki
 {
@@ -27,6 +22,7 @@ in
     ./acme.nix
     ./cloudflare-ddns.nix
     ./bluesky-pds.nix
+    ./servarr.nix
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
@@ -89,11 +85,6 @@ in
       "notify.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9072";
 
       "jellyfin.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8096";
-      "radarr.no-bull.sh" = mkLocalProxyHost config.services.radarr;
-      "sonarr.no-bull.sh" = mkLocalProxyHost config.services.sonarr;
-      "lidarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8686";
-      "bazarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:6767";
-      "prowlarr.no-bull.sh" = mkLocalProxyHost config.services.prowlarr;
       "komga.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9123";
 
       "transmission.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9091";
@@ -115,92 +106,6 @@ in
   services.technitium-dns-server = {
     enable = true;
     openFirewall = true;
-  };
-
-  services.sonarr = {
-    enable = true;
-    openFirewall = false;
-    user = "sonarr";
-    settings = {
-      app = {
-        theme = "dark";
-      };
-      server = {
-        port = 8989;
-        enableSsl = false;
-      };
-      log = {
-        analyticsEnabled = false;
-        logLevel = "info";
-      };
-      auth = {
-        authenticationMethod = "Forms";
-        authenticationRequried = true;
-      };
-    };
-    environmentFiles = [ config.age.secrets."sonarr.age".path ];
-  };
-
-  age.secrets."sonarr.age" = {
-    owner = config.services.sonarr.user;
-    file = ../../secrets/sonarr.age;
-  };
-
-  services.radarr = {
-    enable = true;
-    openFirewall = false;
-    user = "radarr";
-    settings = {
-      app = {
-        theme = "dark";
-      };
-      server = {
-        port = 7878;
-        enableSsl = false;
-      };
-      log = {
-        analyticsEnabled = false;
-        logLevel = "info";
-      };
-      auth = {
-        authenticationMethod = "Forms";
-        authenticationRequried = true;
-      };
-    };
-    environmentFiles = [ config.age.secrets."radarr.age".path ];
-  };
-
-  age.secrets."radarr.age" = {
-    owner = config.services.radarr.user;
-    file = ../../secrets/radarr.age;
-  };
-
-  services.prowlarr = {
-    enable = true;
-    openFirewall = false;
-    settings = {
-      app = {
-        theme = "dark";
-      };
-      server = {
-        port = 9696;
-        enableSsl = false;
-      };
-      log = {
-        analyticsEnabled = false;
-        logLevel = "info";
-      };
-      auth = {
-        authenticationMethod = "Forms";
-        authenticationRequried = true;
-      };
-    };
-    environmentFiles = [ config.age.secrets."prowlarr.age".path ];
-  };
-
-  age.secrets."prowlarr.age" = {
-    owner = config.services.sonarr.user;
-    file = ../../secrets/prowlarr.age;
   };
 
   boot = {
