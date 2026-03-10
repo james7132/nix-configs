@@ -11,11 +11,18 @@ in
 {
   config = mkIf cfg.enable {
     xdg.configFile."niri/config.kdl".source = ./niri.kdl;
+    xdg.configFile."handlr/config.toml".source = ./handlr.toml;
 
     home.packages = with pkgs; [
       python3
       yazi
+
+      vanilla-dmz
+
+      handlr-regex
     ];
+
+    home.file.".local/share/icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
 
     programs.fuzzel = {
       # enable = config.hardware.graphics.enable;
