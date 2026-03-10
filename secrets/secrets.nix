@@ -15,15 +15,16 @@ let
     hourai
     zeus
   ];
-in
-{
-  "bluesky-pds.age" = {
+  mkSingleHostSecret = host: {
     publicKeys = [
       james
-      loki
+      host
     ];
     armor = true;
   };
+in
+{
+  "bluesky-pds.age" = mkSingleHostSecret loki;
   "cloudflare-dns-token.age" = {
     publicKeys = [ james ] ++ systems;
     armor = true;
@@ -32,25 +33,8 @@ in
     publicKeys = [ james ] ++ systems;
     armor = true;
   };
-  "sonarr.age" = {
-    publicKeys = [
-      james
-      loki
-    ];
-    armor = true;
-  };
-  "radarr.age" = {
-    publicKeys = [
-      james
-      loki
-    ];
-    armor = true;
-  };
-  "prowlarr.age" = {
-    publicKeys = [
-      james
-      loki
-    ];
-    armor = true;
-  };
+  "sonarr.age" = mkSingleHostSecret loki;
+  "radarr.age" = mkSingleHostSecret loki;
+  "prowlarr.age" = mkSingleHostSecret loki;
+  "gotify.age" = mkSingleHostSecret loki;
 }

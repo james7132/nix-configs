@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  ...
-}:
-with lib;
+{ ... }:
 let
   localIPs = ''
     allow 0.0.0.0/8;
@@ -47,6 +42,7 @@ in
     ./cloudflare-ddns.nix
     ./bluesky-pds.nix
     ./servarr.nix
+    ./gotify.nix
     ./hardware-configuration.nix
   ];
 
@@ -102,7 +98,6 @@ in
       "ns1.no-bull.sh" = mkProxyHost "http://127.0.0.1:5380" false;
 
       "immich.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:2283" true;
-      "notify.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9072" true;
 
       "jellyfin.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8096" false;
       "komga.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9123" false;
