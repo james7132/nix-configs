@@ -66,7 +66,7 @@ in
       swayidle
       swaybg
       waybar
-
+      xwayland-satellite
       keepassxc
 
       # CLI utilities
