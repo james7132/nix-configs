@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 let
   localIPs = ''
     allow 0.0.0.0/8;
@@ -110,6 +110,12 @@ in
       "sync.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8384" false;
 
       "vikunja.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:3456" false;
+
+      "${config.services.libretranslate.domain}" = {
+        useACMEHost = "no-bull.sh";
+        forceSSL = true;
+        extraConfig = mkIPAllowlist false + "\n deny all;";
+      };
     };
   };
 
@@ -121,6 +127,12 @@ in
   services.technitium-dns-server = {
     enable = true;
     openFirewall = true;
+  };
+
+  services.libretranslate = {
+    enable = true;
+    configureNginx = true;
+    domain = "translate.no-bull.sh";
   };
 
   system.stateVersion = "25.11";

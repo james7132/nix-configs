@@ -11,7 +11,7 @@ in
 {
   config = mkIf cfg.enable {
     xdg.configFile."niri/config.kdl".source = ./niri.kdl;
-    xdg.configFile."handlr/config.toml".source = ./handlr.toml;
+    xdg.configFile."handlr/handlr.toml".source = ./handlr.toml;
 
     home.packages = with pkgs; [
       python3
