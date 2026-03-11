@@ -11,9 +11,7 @@ let
   };
   mkLocalProxyHost =
     service:
-    mkIf service.enable (
-      mkProxyHost "http://127.0.0.1:${builtins.toString service.settings.server.port}"
-    );
+    mkIf service.enable (mkProxyHost "http://127.0.0.1:${toString service.settings.server.port}");
   mkServarrService = serviceName: servicePort: {
     enable = true;
     openFirewall = false;
@@ -42,7 +40,7 @@ in
     virtualHosts = {
       "radarr.no-bull.sh" = mkLocalProxyHost config.services.radarr;
       "sonarr.no-bull.sh" = mkLocalProxyHost config.services.sonarr;
-      "lidarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8686";
+      "lidarr.no-bull.sh" = mkLocalProxyHost config.services.lidarr;
       "bazarr.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:6767";
       "prowlarr.no-bull.sh" = mkLocalProxyHost config.services.prowlarr;
     };
@@ -50,6 +48,7 @@ in
 
   services.sonarr = mkServarrService "sonarr" 8989;
   services.radarr = mkServarrService "radarr" 7878;
+  services.lidarr = mkServarrService "lidarr" 8686;
   services.prowlarr = mkServarrService "prowlarr" 9696;
 
   age.secrets."sonarr.age" = {
@@ -60,6 +59,11 @@ in
   age.secrets."radarr.age" = {
     owner = config.services.radarr.user;
     file = ../../secrets/radarr.age;
+  };
+
+  age.secrets."lidarr.age" = {
+    owner = config.services.lidarr.user;
+    file = ../../secrets/lidarr.age;
   };
 
   age.secrets."prowlarr.age" = {
