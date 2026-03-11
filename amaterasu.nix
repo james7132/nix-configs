@@ -49,6 +49,7 @@
         bypassWorkqueues = true;
       };
     };
+    kernelParams = [ "nvidia.NVreg_TemporaryFilePath=/var/tmp" ];
     kernelModules = [ ];
     extraModulePackages = [ ];
   };
@@ -94,7 +95,7 @@
 
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = false;
+    powerManagement.enable = true;
     powerManagement.finegrained = false;
     open = true;
     nvidiaSettings = true;
