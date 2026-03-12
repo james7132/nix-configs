@@ -137,7 +137,7 @@ in
       "komga.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9123" false;
 
       "transmission.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9091" false;
-      "freshrss.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:9576" false;
+      "news.no-bull.sh" = mkProxyHost "http://127.0.0.1:7214" false;
       "hassio.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:8123" false;
 
       "stats.no-bull.sh" = mkProxyHost "http://leviathan.no-bull.sh:7590" false;
@@ -167,6 +167,20 @@ in
     enable = true;
     configureNginx = true;
     domain = "translate.no-bull.sh";
+  };
+
+  services.miniflux = {
+    enable = true;
+    adminCredentialsFile = config.age.secrets."miniflux.age".path;
+    config = {
+      LISTEN_ADDR = "localhost:7214";
+      RUN_MIGRATIONS = true;
+    };
+  };
+
+  age.secrets."miniflux.age" = {
+    owner = "miniflux";
+    file = ../../secrets/miniflux.age;
   };
 
   system.stateVersion = "25.11";

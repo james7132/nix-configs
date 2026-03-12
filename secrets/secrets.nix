@@ -37,5 +37,7 @@ in
   "radarr.age" = mkSingleHostSecret loki;
   "lidarr.age" = mkSingleHostSecret loki;
   "prowlarr.age" = mkSingleHostSecret loki;
+
   "gotify.age" = mkSingleHostSecret loki;
+  "miniflux.age" = mkSingleHostSecret loki;
 }
