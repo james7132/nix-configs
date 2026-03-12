@@ -1,34 +1,36 @@
-{ config, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  localIPs = ''
-    allow 0.0.0.0/8;
-    allow 10.0.0.0/8;
-    allow 127.0.0.0/8;
-    allow 192.168.0.0/16;
-  '';
-  cloudflareIPs = ''
-    allow 103.21.244.0/22;
-    allow 103.22.200.0/22;
-    allow 103.31.4.0/22;
-    allow 104.16.0.0/13;
-    allow 104.24.0.0/14;
-    allow 108.162.192.0/18;
-    allow 131.0.72.0/22;
-    allow 141.101.64.0/18;
-    allow 162.158.0.0/15;
-    allow 172.64.0.0/13;
-    allow 173.245.48.0/20;
-    allow 188.114.96.0/20;
-    allow 190.93.240.0/20;
-    allow 197.234.240.0/22;
-    allow 198.41.128.0/17;
-  '';
-  mkIPAllowlist =
-    allowExternal: (if allowExternal then "${localIPs}\n${cloudflareIPs}" else localIPs);
+  nginxList = prefix: lib.strings.concatMapStringsSep "\n" (x: "${prefix} ${x};");
+  realIpsFromList = nginxList "set_real_ip_from";
+  fileToList = x: lib.strings.splitString "\n" (builtins.readFile x);
+  cloudflareIPv4s = fileToList (
+    pkgs.fetchurl {
+      url = "https://www.cloudflare.com/ips-v4";
+      sha256 = "0ywy9sg7spafi3gm9q5wb59lbiq0swvf0q3iazl0maq1pj1nsb7h";
+    }
+  );
+  cloudflareIPv6s = fileToList (
+    pkgs.fetchurl {
+      url = "https://www.cloudflare.com/ips-v6";
+      sha256 = "1ad09hijignj6zlqvdjxv7rjj8567z357zfavv201b9vx3ikk7cy";
+    }
+  );
+  localIPv4s = [
+    "0.0.0.0/8"
+    "10.0.0.0/8"
+    "127.0.0.0/8"
+    "192.168.0.0/16"
+  ];
+  ipv4AllowList = nginxList "allow" localIPv4s + "\n deny all;";
   mkProxyHost = url: allowExternal: {
     useACMEHost = "no-bull.sh";
     forceSSL = true;
-    extraConfig = mkIPAllowlist allowExternal + "\n deny all;";
+    extraConfig = lib.mkIf (!allowExternal) ipv4AllowList;
     locations."/" = {
       proxyPass = url;
       proxyWebsockets = true;
@@ -63,6 +65,12 @@ in
     recommendedProxySettings = true;
     recommendedTlsSettings = true;
 
+    commonHttpConfig = ''
+      ${realIpsFromList cloudflareIPv4s}
+      ${realIpsFromList cloudflareIPv6s}
+      real_ip_header CF-Connecting-IP;
+    '';
+
     appendHttpConfig = ''
       # Add HSTS header with preloading to HTTPS requests.
       # Adding this header to HTTP requests is discouraged
@@ -85,19 +93,24 @@ in
     '';
 
     virtualHosts = {
-      "no-bull.sh" = {
+      "default" = {
         useACMEHost = "no-bull.sh";
         forceSSL = true;
         default = true;
+        extraConfig = "deny all;";
+      };
+
+      "no-bull.sh" = {
+        useACMEHost = "no-bull.sh";
+        forceSSL = true;
         root = "/var/www/no-bull.sh";
-        extraConfig = mkIPAllowlist true;
       };
 
       "files.no-bull.sh" = {
         useACMEHost = "no-bull.sh";
         forceSSL = true;
         root = "/mnt/leviathan/files/public";
-        extraConfig = mkIPAllowlist true + ''
+        extraConfig = ''
           autoindex on;
           autoindex_exact_size off;
           autoindex_localtime on;
@@ -135,7 +148,7 @@ in
       "${config.services.libretranslate.domain}" = {
         useACMEHost = "no-bull.sh";
         forceSSL = true;
-        extraConfig = mkIPAllowlist false + "\n deny all;";
+        extraConfig = ipv4AllowList;
       };
     };
   };
